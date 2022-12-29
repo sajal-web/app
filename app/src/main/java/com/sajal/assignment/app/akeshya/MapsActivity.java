@@ -69,7 +69,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     Circle userLocationCircle;
     private GeofencingClient geofencingClient;
     LocationRequest locationRequest;
-    private float RADIOUS = 200;
+    private float RADIOUS = 300;
     private GeofenceHelper geofenceHelper;
     private String GEOFENCE_ID = "some_id";
     //current and destination location objects
@@ -101,7 +101,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         locationRequest.setFastestInterval(2000);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 //        endLetlng = new LatLng(22.4200429, 87.3180334); -- swiming clab
-        endLetlng =new LatLng(22.8586733,86.9182874);
+        endLetlng = new LatLng(38.897957,-77.036560);
         geofencingClient = LocationServices.getGeofencingClient(this);
         geofenceHelper = new GeofenceHelper(this);
         ivCar.setOnClickListener(new View.OnClickListener() {
@@ -134,12 +134,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 //       start = new LatLng(22.455064,87.324039);
         MarkerOptions markerOptions = new MarkerOptions().position(endLetlng).title("USA").snippet("The White House");
         mMap.addMarker(markerOptions);
-        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(endLetlng, 15);
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(endLetlng, 18);
         mMap.animateCamera(cameraUpdate);
         CircleOptions circleOptions = new CircleOptions();
         circleOptions.center(endLetlng);
         circleOptions.radius(RADIOUS);
-        circleOptions.strokeColor(Color.argb(255, 11, 227, 62));
+        circleOptions.strokeColor(Color.argb(205, 11, 227, 62));
         circleOptions.fillColor(Color.argb(64, 100, 250, 135));
         mMap.addCircle(circleOptions);
 //        Location location : locationResult.getLocations()
@@ -369,9 +369,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onRoutingFailure(RouteException e) {
         View parentLayout = findViewById(android.R.id.content);
-        Toast.makeText(geofenceHelper, "Root not found ...", Toast.LENGTH_SHORT).show();
-        Snackbar snackbar = Snackbar.make(parentLayout, e.toString(), Snackbar.LENGTH_LONG);
-        snackbar.show();
+        Toast.makeText(geofenceHelper, "Driving Direction Not Found From Your Location to White House in the United States...", Toast.LENGTH_SHORT).show();
+        Snackbar snackbar = Snackbar.make(parentLayout, e.toString(), Snackbar.LENGTH_SHORT);
+//        snackbar.show();
 //    findRoutes(start,end);
     }
 

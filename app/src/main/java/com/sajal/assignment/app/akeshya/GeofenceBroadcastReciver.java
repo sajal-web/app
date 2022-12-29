@@ -22,8 +22,8 @@ public class GeofenceBroadcastReciver extends BroadcastReceiver {
         // an Intent broadcast.
 
 //
-        Toast.makeText(context, "Geofence triggered...", Toast.LENGTH_LONG).show();
-
+//        Toast.makeText(context, "Geofence triggered...", Toast.LENGTH_LONG).show();
+        MessageHelper messageHelper = new MessageHelper(context);
 
         GeofencingEvent geofencingEvent = GeofencingEvent.fromIntent(intent);
         if (geofencingEvent.hasError()){
@@ -38,13 +38,17 @@ public class GeofenceBroadcastReciver extends BroadcastReceiver {
         int transitionType =geofencingEvent.getGeofenceTransition();
         switch (transitionType){
             case Geofence.GEOFENCE_TRANSITION_ENTER:
-                Toast.makeText(context, "GEOFENCE_TRANSITION_ENTER", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(context, "GEOFENCE_TRANSITION_ENTER", Toast.LENGTH_SHORT).show();
+                messageHelper.sendHighPriorityNotification("Arrived","You Have Reached Your Destination",MapsActivity.class);
+
                 break;
             case Geofence.GEOFENCE_TRANSITION_DWELL:
-                Toast.makeText(context, "GEOFENCE_TRANSITION_DWELL", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(context, "GEOFENCE_TRANSITION_DWELL", Toast.LENGTH_SHORT).show();
+//                messageHelper.sendHighPriorityNotification("GEOFENCE_TRANSITION_DWELL","You arrived your destination...",MapsActivity.class);
                 break;
             case Geofence.GEOFENCE_TRANSITION_EXIT:
-                Toast.makeText(context, "GEOFENCE_TRANSITION_EXIT", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(context, "GEOFENCE_TRANSITION_EXIT", Toast.LENGTH_SHORT).show();
+//                messageHelper.sendHighPriorityNotification("GEOFENCE_TRANSITION_EXIT","You arrived your destination...",MapsActivity.class);
                 break;
         }
     }
