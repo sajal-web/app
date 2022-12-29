@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -79,6 +80,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     //polyline object
     private List<Polyline> polylines = null;
     LatLng endLetlng;
+    ImageView ivCar;
 
 
     @Override
@@ -93,13 +95,24 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        ivCar = findViewById(R.id.ivCar);
         locationRequest = LocationRequest.create();
         locationRequest.setInterval(4000);
         locationRequest.setFastestInterval(2000);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        endLetlng = new LatLng(22.4605862, 87.2975192);
+//        endLetlng = new LatLng(22.4200429, 87.3180334); -- swiming clab
+        endLetlng =new LatLng(22.8586733,86.9182874);
         geofencingClient = LocationServices.getGeofencingClient(this);
         geofenceHelper = new GeofenceHelper(this);
+        ivCar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(endLetlng, 15);
+                mMap.animateCamera(cameraUpdate);
+//                mMap.moveCamera(CameraUpdateFactory.newLatLng(endLetlng));
+//            mMap.animateCamera(CameraUpdateFactory.zoomTo(16));
+            }
+        });
 
     }
 
@@ -129,20 +142,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         circleOptions.strokeColor(Color.argb(255, 11, 227, 62));
         circleOptions.fillColor(Color.argb(64, 100, 250, 135));
         mMap.addCircle(circleOptions);
+//        Location location : locationResult.getLocations()
+//        mMap.moveCamera(CameraUpdateFactory.newLatLng());
+//        mMap.animateCamera(CameraUpdateFactory.zoomTo(16));
 
 
-        if (Build.VERSION.SDK_INT>=29){
-            if (ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_GRANTED){
+        if (Build.VERSION.SDK_INT >= 29) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 addGeofence(endLetlng, RADIOUS);
-            }else {
-                if(ActivityCompat.shouldShowRequestPermissionRationale(this,Manifest.permission.ACCESS_BACKGROUND_LOCATION)){
-                    ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_BACKGROUND_LOCATION},BACKGROUND_LOCATION_REQUEST_CODE);
-                }else {
-                    ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_BACKGROUND_LOCATION},BACKGROUND_LOCATION_REQUEST_CODE);
+            } else {
+                if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_BACKGROUND_LOCATION)) {
+                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_BACKGROUND_LOCATION}, BACKGROUND_LOCATION_REQUEST_CODE);
+                } else {
+                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_BACKGROUND_LOCATION}, BACKGROUND_LOCATION_REQUEST_CODE);
 
                 }
             }
-        }else {
+        } else {
             addGeofence(endLetlng, RADIOUS);
         }
 
@@ -193,6 +209,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     }
                 });
     }
+
     LocationCallback locationCallback = new LocationCallback() {
         @Override
         public void onLocationResult(@NonNull LocationResult locationResult) {
@@ -202,6 +219,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             for (Location location : locationResult.getLocations()) {
                 Log.i("onlocationresult", location.toString());
                 setUserLocationMarker(locationResult.getLastLocation());
+                end = endLetlng;
+                start = new LatLng(location.getLatitude(), location.getLongitude());
+                findRoutes(start, end);
+                setUserLocationMarker(location);
+
             }
         }
     };
@@ -242,10 +264,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public void onMyLocationChange(Location location) {
                 myLocation = location;
 //                end =new LatLng(22.474818, 87.325315); // ending location latitude longitude
-                end = endLetlng;
-                start = new LatLng(location.getLatitude(), location.getLongitude());
-                findRoutes(start, end);
-                setUserLocationMarker(location);
+//                end = endLetlng;
+//                start = new LatLng(location.getLatitude(), location.getLongitude());
+//                findRoutes(start, end);
+//                setUserLocationMarker(location);
             }
         });
     }
@@ -336,7 +358,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     .withListener(this)
                     .alternativeRoutes(true)
                     .waypoints(start, end)
-                    .key("AIzaSyBRM3tYOzR7hFyFgWXTQy7XabwOKV4zKH4")  //also define your api key here.
+                    .key("your_api_key")  //also define your api key here.
                     .build();
             routing.execute();
         }
@@ -347,6 +369,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onRoutingFailure(RouteException e) {
         View parentLayout = findViewById(android.R.id.content);
+        Toast.makeText(geofenceHelper, "Root not found ...", Toast.LENGTH_SHORT).show();
         Snackbar snackbar = Snackbar.make(parentLayout, e.toString(), Snackbar.LENGTH_LONG);
         snackbar.show();
 //    findRoutes(start,end);
@@ -419,7 +442,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .PERMISSION_GRANTED) {
             startLocationUpdate();
 
-        } else  {
+        } else {
             askLocationPermission();
         }
     }
