@@ -39,6 +39,7 @@ public class GeofenceBroadcastReciver extends BroadcastReceiver {
         switch (transitionType){
             case Geofence.GEOFENCE_TRANSITION_ENTER:
 //                Toast.makeText(context, "GEOFENCE_TRANSITION_ENTER", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "You Have Reached Your Destination", Toast.LENGTH_LONG).show();
                 messageHelper.sendHighPriorityNotification("Arrived","You Have Reached Your Destination",MapsActivity.class);
 
                 break;
