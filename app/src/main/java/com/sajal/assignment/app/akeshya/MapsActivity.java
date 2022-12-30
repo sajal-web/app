@@ -70,7 +70,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     Circle userLocationCircle;
     private GeofencingClient geofencingClient;
     LocationRequest locationRequest;
-    private float RADIOUS = 100;
+    private float RADIOUS = 300;
     private GeofenceHelper geofenceHelper;
     private String GEOFENCE_ID = "some_id";
     //current and destination location objects
