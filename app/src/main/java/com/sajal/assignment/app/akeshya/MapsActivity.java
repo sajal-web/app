@@ -159,12 +159,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         } else {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_BACKGROUND_LOCATION)) {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_BACKGROUND_LOCATION}, BACKGROUND_LOCATION_REQUEST_CODE);
-//                    addGeofence(endLetlng, RADIOUS);
-//                    getMyLocation();
             } else {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_BACKGROUND_LOCATION}, BACKGROUND_LOCATION_REQUEST_CODE);
-//                    addGeofence(endLetlng, RADIOUS);
-//                    getMyLocation();
             }
         }
         addGeofence(endLetlng,RADIOUS);
@@ -264,6 +260,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }
             }
         }
+        Toast.makeText(getApplicationContext(), "Click the upper car image to locate the destination location and the location btn image to your current location", Toast.LENGTH_LONG).show();
         addGeofence(endLetlng,RADIOUS);
     }
 
